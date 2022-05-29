@@ -1,0 +1,40 @@
+name: Deploy frontend to github pages
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - client/**
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./client
+    steps:
+      - name: Install NodeJS
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+
+      - name: Checkout branch
+        uses: actions/checkout@v3
+
+      - name: Install dependencies
+        run: npm i
+
+      - name: Deploy
+        env:
+          GIT_USERNAME: ${{ secrets.GIT_USERNAME }}
+          GIT_MAILADDRESS: ${{ secrets.GIT_MAILADDRESS }}
+          GH_PAGES_URL: ${{ secrets.GH_PAGES_URL }}
+          VITE_API_URL: ${{ secrets.VITE_API_URL }}
+        run: |
+          git config user.name "$GIT_USERNAME" && git config user.email "$GIT_MAILADDRESS"
+          git checkout --orphan gh-pages
+          npm run build
+          echo "$GH_PAGES_URL" > dist/CNAME
+          git --work-tree dist add --all
+          git --work-tree dist commit -m "gh-pages"
+          git push origin HEAD:gh-pages --force
