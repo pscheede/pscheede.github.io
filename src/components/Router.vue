@@ -1,5 +1,5 @@
 <template>
-  <component :is="currentView" />
+  <component :is="currentView"/>
 </template>
 
 <script setup lang="ts">
@@ -8,20 +8,16 @@ import Gallery from './gallery/Gallery.vue';
 import NotFound from './NotFound.vue';
 
 import {computed, ref} from "vue";
+import {routePath} from "./routePath";
 
-const routes = {
+const routes: any = {
   '/': Home,
   '/gallery': Gallery,
 };
 
-const currentPath = ref(window.location.hash);
-
-window.addEventListener('hashchange', () => {
-  currentPath.value = window.location.hash;
-});
-
 const currentView = computed(() => {
-  return routes[currentPath.value.slice(1) || '/'] || NotFound;
+  if (routePath.value.startsWith('/image')) return Gallery;
+  return routes[routePath.value || '/'] || NotFound;
 });
 
 </script>
