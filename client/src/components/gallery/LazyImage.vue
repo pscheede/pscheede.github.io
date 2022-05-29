@@ -5,7 +5,7 @@
 <script setup lang="ts">
 import {computed} from "vue";
 
-const props = defineProps<{ source: String, index: number, currentIndex: number }>();
+const props = defineProps<{ source: string, index: number, currentIndex: number }>();
 const alignment = computed(
     () => props.currentIndex === props.index ? "0" : props.currentIndex > props.index ? "-100vw" : "100vw"
 );

@@ -1,7 +1,7 @@
 <template>
   <div v-show="!large" class="overview">
     <a v-for="(img, idx) in images" :href="`#/image/${ img.filename }`">
-      <img :src="img.sizes.thumbnail.url">
+      <img :src="img.sizes.thumbnail.url" alt="">
     </a>
   </div>
   <div v-show="large" class="container" ref="container">
@@ -18,6 +18,7 @@ import {routePath} from "../routePath";
 interface Image {
   url: string;
   filename: string;
+  sizes: { thumbnail: { url: string } };
 }
 
 let large = ref<boolean>(false);
@@ -88,7 +89,7 @@ onMounted(async () => {
     prevImage();
   });
 
-  const req = await fetch('http://localhost:3042/api/images?sort=-updatedAt');
+  const req = await fetch(`${import.meta.env.VITE_API_URL}/api/images?sort=-updatedAt`);
   const json: { docs: Image[] } = await req.json();
 
   images.value = json.docs
