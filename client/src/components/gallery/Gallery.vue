@@ -122,7 +122,7 @@ onMounted(async () => {
   .overview {
     padding: 2rem;
     gap: 2rem;
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
     grid-auto-rows: minmax(150px, auto);
   }
 }
