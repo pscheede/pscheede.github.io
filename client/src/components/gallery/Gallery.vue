@@ -5,7 +5,8 @@
     </a>
   </div>
   <div v-show="large" class="container" ref="container">
-    <LazyImage v-for="(img, idx) in images" :source="img.url" :index="idx" :current-index="currentIndex"></LazyImage>
+    <LazyImage v-for="(img, idx) in images" :source="img.url" :index="idx" :current-index="currentIndex"
+               :sizes="getSizes(img)"></LazyImage>
     <div :class="{ show : showControls && hasPrevImage(), control: true }" @click="prevImage" id="left">&lt;</div>
     <div :class="{ show : showControls && hasNextImage(), control: true }" @click="nextImage" id="right">&gt;</div>
     <div :class="{ show : showControls, control: true }" @click="closeImage" id="close">x</div>
@@ -21,7 +22,11 @@ import {routePath} from "../routePath";
 interface Image {
   url: string;
   filename: string;
-  sizes: { thumbnail: { url: string } };
+  sizes: { [key: string]: { url: string, width: number } };
+}
+
+function getSizes(img: Image): { [key: number]: string } {
+  return Object.fromEntries(Object.entries(img.sizes).map(([, {url, width}]) => [width, url]));
 }
 
 let large = ref<boolean>(false);
@@ -119,7 +124,7 @@ function startHideControls() {
   clearTimeout(timeout);
   timeout = setTimeout(() => {
     showControls.value = false;
-  }, 500);
+  }, 1500);
 }
 
 </script>
