@@ -59,16 +59,24 @@ function prevImage() {
 }
 
 function closeImage() {
-  window.location.hash = "#/gallery";
+  if (openedFromGallery) {
+    history.back();
+  } else {
+    currentIndex.value = -5;
+    large.value = false;
+    setQueryString();
+  }
 }
 
+// http://localhost:3000/#/image/_DSC1652.jpg
+
 function setQueryString() {
-  const currentImg = images.value.at(currentIndex.value);
 
   const newUrl = new URL(window.location.href);
-  if (currentImg === undefined) {
+  if (currentIndex.value < 0) {
     newUrl.hash = '/gallery';
   } else {
+    const currentImg = images.value.at(currentIndex.value)!;
     newUrl.hash = `/image/${currentImg.filename}`
   }
   window.history.replaceState(null, '', newUrl.href)
@@ -94,6 +102,8 @@ async function setLargeView(newPath: string) {
 
 watch(routePath, setLargeView);
 
+let openedFromGallery = true;
+
 let hammertime;
 onMounted(async () => {
   hammertime = new Hammer((container.value as HTMLElement), {});
@@ -110,6 +120,10 @@ onMounted(async () => {
   images.value = json.docs
 
   await setLargeView(routePath.value);
+
+  if (large.value) {
+    openedFromGallery = false;
+  }
 
   container.value?.addEventListener('mousemove', async () => {
     showControls.value = true;
