@@ -1,11 +1,14 @@
 <template>
   <div v-show="!large" class="overview">
-    <a v-for="(img, idx) in images" :href="`#/image/${ img.filename }`">
+    <a v-for="(img) in images" :href="`#/image/${ img.filename }`">
       <img :src="img.sizes.thumbnail.url" alt="">
     </a>
   </div>
   <div v-show="large" class="container" ref="container">
     <LazyImage v-for="(img, idx) in images" :source="img.url" :index="idx" :current-index="currentIndex"></LazyImage>
+    <div :class="{ show : showControls && hasPrevImage(), control: true }" @click="prevImage" id="left">&lt;</div>
+    <div :class="{ show : showControls && hasNextImage(), control: true }" @click="nextImage" id="right">&gt;</div>
+    <div :class="{ show : showControls, control: true }" @click="closeImage" id="close">x</div>
   </div>
 </template>
 
@@ -23,28 +26,35 @@ interface Image {
 
 let large = ref<boolean>(false);
 
-// let urls = computed<string[]>(() => images.value.map((img) => {
-//   console.log(img.url);
-//   return img.url;
-// }));
-
 let images = ref<Image[]>([]);
 
 let currentIndex = ref(-5);
 const container = ref<HTMLElement>();
 
+function hasNextImage() {
+  return currentIndex.value < images.value.length - 1;
+}
+
+function hasPrevImage() {
+  return currentIndex.value > 0;
+}
+
 function nextImage() {
-  if (currentIndex.value >= images.value.length - 1) return;
+  if (!hasNextImage()) return;
 
   currentIndex.value++;
   setQueryString();
 }
 
 function prevImage() {
-  if (currentIndex.value <= 0) return;
+  if (!hasPrevImage()) return;
 
   currentIndex.value--;
   setQueryString();
+}
+
+function closeImage() {
+  window.location.hash = "#/gallery";
 }
 
 function setQueryString() {
@@ -95,7 +105,22 @@ onMounted(async () => {
   images.value = json.docs
 
   await setLargeView(routePath.value);
+
+  container.value?.addEventListener('mousemove', async () => {
+    showControls.value = true;
+    startHideControls();
+  });
 });
+
+let showControls = ref(false);
+let timeout: number;
+
+function startHideControls() {
+  clearTimeout(timeout);
+  timeout = setTimeout(() => {
+    showControls.value = false;
+  }, 500);
+}
 
 </script>
 
@@ -107,9 +132,11 @@ onMounted(async () => {
   display: grid;
   /*flex-flow: row wrap;*/
 
-  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  align-items: center;
+
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
   /*grid-auto-columns: minmax(200px, 300px);*/
-  grid-auto-rows: minmax(140px, auto);
+  grid-auto-rows: minmax(100px, auto);
   grid-auto-flow: row;
 
   gap: 1rem;
@@ -118,25 +145,37 @@ onMounted(async () => {
   width: 100%;
 }
 
-@media only screen and (min-width: 576px) {
+@media only screen and (min-width: 500px) {
   .overview {
     padding: 2rem;
     gap: 2rem;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    grid-auto-rows: minmax(150px, auto);
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  }
+}
+
+@media only screen and (min-width: 700px) {
+  .overview {
+    padding: 2rem;
+    gap: 2rem;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
   }
 }
 
 
-.overview a {
-  display: flex;
-  flex-direction: column;
+@media only screen and (min-width: 992px) {
+  .overview {
+    padding: 2rem;
+    gap: 2rem;
+    grid-template-columns: repeat(auto-fit, minmax(288px, 1fr));
+  }
+}
 
-  justify-content: center;
-  align-items: center;
-
-  flex-basis: 200px;
-  flex-grow: 1;
+@media only screen and (min-width: 1600px) {
+  .overview {
+    padding: 2rem;
+    gap: 2rem;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  }
 }
 
 .overview img {
@@ -153,5 +192,51 @@ onMounted(async () => {
   width: 100%;
 
   user-select: none;
+}
+
+.container .control {
+  line-height: .5;
+  font-size: 5rem;
+  color: rgba(255, 255, 255, .6);
+  cursor: pointer;
+
+  text-shadow: 1px 1px 20px #000;
+
+  transition: visibility 0ms 200ms, opacity 200ms linear 0ms;
+
+  visibility: hidden;
+  opacity: 0;
+}
+
+.container .control.show {
+  visibility: visible;
+  opacity: 1;
+
+  transition: visibility 0ms 0ms, opacity 200ms linear 0ms;
+}
+
+.container .control:hover {
+  color: rgba(255, 255, 255, .9);
+}
+
+#left {
+  position: fixed;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+#right {
+  position: fixed;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+#close {
+  font-size: 3rem;
+  position: fixed;
+  right: 1rem;
+  top: 1rem;
 }
 </style>
