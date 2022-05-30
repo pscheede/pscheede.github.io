@@ -1,11 +1,22 @@
 <template>
-  <div class="container"><img :src="_source" alt="" v-on:dragstart.prevent=""></div>
+  <div class="container">
+    <picture>
+      <source v-for="(value, key) in _sizes" :media="`(max-width: ${key}px)`" :srcset="value">
+      <img :src="_source" alt="" v-on:dragstart.prevent="">
+    </picture>
+  </div>
 </template>
 
 <script setup lang="ts">
 import {computed} from "vue";
 
-const props = defineProps<{ source: string, index: number, currentIndex: number }>();
+const props = defineProps<{
+  source: string,
+  index: number,
+  currentIndex: number,
+  sizes: { [key: number]: string },
+}>();
+
 const alignment = computed(
     () => props.currentIndex === props.index ? "0" : props.currentIndex > props.index ? "-100vw" : "100vw"
 );
@@ -19,6 +30,17 @@ const _source = computed(
         return props.source;
       } else {
         return "";
+      }
+    }
+);
+
+const _sizes = computed(
+    () => {
+      if (wasLoaded || Math.abs(props.currentIndex - props.index) < 2) {
+        wasLoaded = true;
+        return props.sizes;
+      } else {
+        return {};
       }
     }
 );
@@ -46,7 +68,7 @@ const _source = computed(
   will-change: transform;
 }
 
-img {
+img, picture {
   max-width: 100%;
   max-height: 100%;
 
