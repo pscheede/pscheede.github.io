@@ -107,7 +107,7 @@ onMounted(async () => {
   display: grid;
   /*flex-flow: row wrap;*/
 
-  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
   /*grid-auto-columns: minmax(200px, 300px);*/
   grid-auto-rows: minmax(140px, auto);
   grid-auto-flow: row;
