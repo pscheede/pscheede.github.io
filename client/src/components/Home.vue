@@ -1,9 +1,16 @@
 <template>
-  <div class="container">
-    <h1>{{ t.t('hello') }}</h1>
-    <i18n-t keypath="look_at" tag="h2">
-      <a href="#/gallery">{{ t.t('photography') }}</a>
-    </i18n-t>
+  <div class="row">
+    <div class="container">
+      <h1>Philipp Scheede</h1>
+      <h2>{{ t.t('photographer') }}</h2>
+    </div>
+    <div class="container links">
+      <h3 class="check-out">{{ t.t('check_out' )}}</h3>
+      <ul>
+        <li><a href="#/gallery">{{ t.t('gallery') }}</a></li>
+        <li><a href="https://instagram.com/photos_by_philipp" target="_blank" rel="noopener noreferrer">{{ t.t('instagram') }}</a></li>
+      </ul>
+    </div>
   </div>
 </template>
 
@@ -13,40 +20,119 @@ import {useI18n} from "vue-i18n";
 const t = useI18n();
 </script>
 
-<style scoped>
-.container {
-  position: absolute;
-  top: 20%;
-  left: 50%;
+<style scoped lang="scss">
+$b1: 900px;
+$b2: 1200px;
+$b3: 1400px;
+$b4: 2000px;
+
+.row {
+  display: flex;
+  justify-content: center;
+
+  height: calc(100vh - 2rem);
+  padding: 0 1rem;
+
+  font-size: 1rem;
+
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4rem;
+
   width: fit-content;
-  transform: translateX(-50%);
+  margin: 1rem auto;
+
+  @media only screen and (min-width: $b1) {
+    font-size: 1.125rem;
+
+    flex-direction: row;
+    align-items: center;
+
+    gap: 5rem;
+
+    width: 100%;
+    margin: 0;
+  }
+
+  @media only screen and (min-width: $b2) {
+    font-size: 1.5rem;
+  }
+
+  @media only screen and (min-width: $b3) {
+    gap: 10rem;
+  }
+
+  @media only screen and (min-width: $b4) {
+    font-size: 1.75rem;
+    gap: 15rem;
+  }
+}
+
+.container {
   color: var(--text-color);
+
+  display: flex;
+  flex-direction: column;
+
+  align-items: flex-start;
+}
+
+.links {
+  @media only screen and (min-width: $b1) {
+    margin-top: 2em;
+  }
 }
 
 h1 {
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
+  font-size: 3em;
+  font-weight: 300;
+
+  @media only screen and (min-width: $b1) {
+    font-size: 4em;
+  }
+
+  @media only screen and (min-width: $b3) {
+    font-size: 4.5em;
+  }
+}
+
+h2, h3 {
+  margin-bottom: 1rem;
+
+  &.check-out {
+    margin-bottom: 1.5rem;
+  }
+}
+
+
+ul li {
+  list-style: none;
+  margin-bottom: 1rem;
 }
 
 a {
   color: var(--text-color);
-}
 
-a:visited {
-  color: var(--text-color);
-}
+  &:visited {
+    color: var(--text-color);
+  }
 
-a:hover {
-  color: var(--text-color-highlight);
+  &:hover {
+    color: var(--text-color-highlight);
+  }
 }
 </style>
 
 <i18n lang="yaml">
 de:
-  hello: Hi, mein Name ist Philipp Scheede!
-  photography: Fotografie
-  look_at: Sieh dir meine {0} an.
+  photographer: Hobbyfotograf
+  gallery: Bildergalerie
+  check_out: 'Links:'
+  instagram: Instagram
 en:
-  hello: Hi, my name is Philipp Scheede!
-  photography: photography
-  look_at: Have a look at my {0}.
+  photographer: Amateur Photographer
+  gallery: photo gallery
+  check_out: 'check out:'
+  instagram: instagram
 </i18n>
