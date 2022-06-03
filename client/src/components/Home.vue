@@ -27,10 +27,14 @@ $b3: 1400px;
 $b4: 2000px;
 
 .row {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+
   display: flex;
   justify-content: center;
 
-  height: calc(100vh - 2rem);
+  height: calc(100% - 2rem);
   padding: 0 1rem;
 
   font-size: 1rem;
@@ -40,7 +44,7 @@ $b4: 2000px;
   gap: 4rem;
 
   width: fit-content;
-  margin: 1rem auto;
+  margin: 1rem 0;
 
   @media only screen and (min-width: $b1) {
     font-size: 1.125rem;
@@ -51,7 +55,6 @@ $b4: 2000px;
     gap: 5rem;
 
     width: 100%;
-    margin: 0;
   }
 
   @media only screen and (min-width: $b2) {
@@ -85,8 +88,16 @@ $b4: 2000px;
 
 h1 {
   margin-bottom: 1.5rem;
-  font-size: 3em;
+  font-size: 2em;
   font-weight: 300;
+
+  @media only screen and (min-width: 370px) {
+    font-size: 2.5em;
+  }
+
+  @media only screen and (min-width: 430px) {
+    font-size: 3em;
+  }
 
   @media only screen and (min-width: $b1) {
     font-size: 4em;
