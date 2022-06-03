@@ -1,4 +1,5 @@
 <template>
+  <Header v-if="!large"></Header>
   <div v-show="!large" class="overview">
     <a v-for="(img) in images" :href="`#/image/${ img.filename }`">
       <img :src="img.sizes.thumbnail.url" alt="">
@@ -18,6 +19,7 @@ import LazyImage from './LazyImage.vue';
 import Hammer from 'hammerjs';
 import {onMounted, ref, watch} from "vue";
 import {routePath} from "../routePath";
+import Header from "../Header.vue";
 
 interface Image {
   url: string;
@@ -143,8 +145,7 @@ function startHideControls() {
 
 </script>
 
-<style scoped>
-
+<style scoped lang="scss">
 .overview {
   padding: 1rem;
 
@@ -162,46 +163,38 @@ function startHideControls() {
 
   min-height: 100%;
   width: 100%;
-}
 
-@media only screen and (min-width: 500px) {
-  .overview {
+  @media only screen and (min-width: 500px) {
     padding: 2rem;
     gap: 2rem;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   }
-}
 
-@media only screen and (min-width: 700px) {
-  .overview {
+  @media only screen and (min-width: 700px) {
     padding: 2rem;
     gap: 2rem;
     grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
   }
-}
 
 
-@media only screen and (min-width: 992px) {
-  .overview {
+  @media only screen and (min-width: 992px) {
     padding: 2rem;
     gap: 2rem;
     grid-template-columns: repeat(auto-fit, minmax(288px, 1fr));
   }
-}
 
-@media only screen and (min-width: 1600px) {
-  .overview {
+  @media only screen and (min-width: 1600px) {
     padding: 2rem;
     gap: 2rem;
     grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
   }
-}
 
-.overview img {
-  max-width: 100%;
-  max-height: 100%;
+  img {
+    max-width: 100%;
+    max-height: 100%;
 
-  box-shadow: 5px 5px 50px -20px #000a;
+    box-shadow: 5px 5px 50px -20px #000a;
+  }
 }
 
 .container {
@@ -211,31 +204,31 @@ function startHideControls() {
   width: 100%;
 
   user-select: none;
-}
 
-.container .control {
-  line-height: .5;
-  font-size: 5rem;
-  color: rgba(255, 255, 255, .6);
-  cursor: pointer;
+  .control {
+    line-height: .5;
+    font-size: 5rem;
+    color: rgba(255, 255, 255, .6);
+    cursor: pointer;
 
-  text-shadow: 1px 1px 20px #000;
+    text-shadow: 1px 1px 20px #000;
 
-  transition: visibility 0ms 200ms, opacity 200ms linear 0ms;
+    transition: visibility 0ms 200ms, opacity 200ms linear 0ms;
 
-  visibility: hidden;
-  opacity: 0;
-}
+    visibility: hidden;
+    opacity: 0;
 
-.container .control.show {
-  visibility: visible;
-  opacity: 1;
+    &.show {
+      visibility: visible;
+      opacity: 1;
 
-  transition: visibility 0ms 0ms, opacity 200ms linear 0ms;
-}
+      transition: visibility 0ms 0ms, opacity 200ms linear 0ms;
+    }
 
-.container .control:hover {
-  color: rgba(255, 255, 255, .9);
+    &:hover {
+      color: rgba(255, 255, 255, .9);
+    }
+  }
 }
 
 #left {
