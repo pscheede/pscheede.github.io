@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import {computed, onMounted, ref, watch} from "vue";
+import {computed, onMounted, onUnmounted, ref, watch} from "vue";
 import Hammer from 'hammerjs';
 
 const props = defineProps<{
@@ -120,12 +120,26 @@ onMounted(() => {
   });
 });
 
+const pixelRatio = ref(window.devicePixelRatio || 1);
+
+function resize() {
+  pixelRatio.value = window.devicePixelRatio || 1;
+}
+
+onMounted(() => {
+  window.addEventListener("resize", resize);
+})
+
+onUnmounted(() => {
+  window.removeEventListener("resize", resize);
+})
 </script>
 
 <template>
   <div class="container">
     <picture ref="picture">
-      <source v-if="scale === 1" v-for="(value, key) in _sizes" :media="`(max-width: ${key}px)`" :srcset="value">
+      <source v-for="(value, key) in _sizes" v-if="scale === 1" :media="`(max-width: ${key / pixelRatio}px)`"
+              :srcset="value">
       <img :src="_source" alt="" v-on:dragstart.prevent="">
     </picture>
   </div>
