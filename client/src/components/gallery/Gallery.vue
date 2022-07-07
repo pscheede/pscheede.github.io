@@ -1,22 +1,5 @@
-<template>
-  <Header v-if="!large"></Header>
-  <div v-show="!large" class="overview">
-    <a v-for="(img) in images" :href="`#/image/${ img.filename }`">
-      <img :src="img.sizes.thumbnail.url" alt="">
-    </a>
-  </div>
-  <div v-show="large" class="container" ref="container">
-    <LazyImage v-for="(img, idx) in images" :source="img.url" :index="idx" :current-index="currentIndex"
-               :sizes="getSizes(img)"></LazyImage>
-    <div :class="{ show : showControls && hasPrevImage(), control: true }" @click="prevImage" id="left">&lt;</div>
-    <div :class="{ show : showControls && hasNextImage(), control: true }" @click="nextImage" id="right">&gt;</div>
-    <div :class="{ show : showControls, control: true }" @click="closeImage" id="close">x</div>
-  </div>
-</template>
-
 <script setup lang="ts">
 import LazyImage from './LazyImage.vue';
-import Hammer from 'hammerjs';
 import {onMounted, ref, watch} from "vue";
 import {routePath} from "../routePath";
 import Header from "../Header.vue";
@@ -36,7 +19,6 @@ let large = ref<boolean>(false);
 let images = ref<Image[]>([]);
 
 let currentIndex = ref(-5);
-const container = ref<HTMLElement>();
 
 function hasNextImage() {
   return currentIndex.value < images.value.length - 1;
@@ -106,16 +88,7 @@ watch(routePath, setLargeView);
 
 let openedFromGallery = true;
 
-let hammertime;
 onMounted(async () => {
-  hammertime = new Hammer((container.value as HTMLElement), {});
-  hammertime.on("swipeleft", () => {
-    nextImage();
-  });
-  hammertime.on("swiperight", () => {
-    prevImage();
-  });
-
   const req = await fetch(`${import.meta.env.VITE_API_URL}/api/images?sort=-updatedAt`);
   const json: { docs: Image[] } = await req.json();
 
@@ -126,15 +99,15 @@ onMounted(async () => {
   if (large.value) {
     openedFromGallery = false;
   }
-
-  container.value?.addEventListener('mousemove', async () => {
-    showControls.value = true;
-    startHideControls();
-  });
 });
 
 let showControls = ref(false);
 let timeout: number;
+
+function mouseMove() {
+  showControls.value = true;
+  startHideControls();
+}
 
 function startHideControls() {
   clearTimeout(timeout);
@@ -144,6 +117,22 @@ function startHideControls() {
 }
 
 </script>
+
+<template>
+  <Header v-if="!large"></Header>
+  <div v-show="!large" class="overview">
+    <a v-for="(img) in images" :href="`#/image/${ img.filename }`">
+      <img :src="img.sizes.thumbnail.url" alt="">
+    </a>
+  </div>
+  <div v-show="large" class="container" @mousemove="mouseMove">
+    <LazyImage v-for="(img, idx) in images" :source="img.url" :index="idx" :current-index="currentIndex"
+               :sizes="getSizes(img)" @next="nextImage" @prev="prevImage"></LazyImage>
+    <div :class="{ show : showControls && hasPrevImage(), control: true }" @click="prevImage" id="left">&lt;</div>
+    <div :class="{ show : showControls && hasNextImage(), control: true }" @click="nextImage" id="right">&gt;</div>
+    <div :class="{ show : showControls, control: true }" @click="closeImage" id="close">x</div>
+  </div>
+</template>
 
 <style scoped lang="scss">
 .overview {
