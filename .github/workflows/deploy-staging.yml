@@ -1,0 +1,45 @@
+name: Deploy frontend to github pages
+on:
+  pull_request:
+    paths:
+      - client/**
+      - .github/**
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    name: Deploy to Staging
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./client
+    steps:
+      - name: Install NodeJS
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+
+      - name: Checkout branch
+        uses: actions/checkout@v3
+
+      - name: Install dependencies
+        run: npm i
+
+      - uses: webfactory/ssh-agent@v0.7.0
+        with:
+          ssh-private-key: ${{ secrets.DEPLOY_PRIVATE_KEY }}
+
+      - name: Deploy
+        env:
+          GIT_USERNAME: ${{ secrets.GIT_USERNAME }}
+          GIT_MAILADDRESS: ${{ secrets.GIT_MAILADDRESS }}
+          GH_PAGES_URL: ${{ secrets.GH_PAGES_STAGING_URL }}
+        run: |
+          git config user.name "$GIT_USERNAME" && git config user.email "$GIT_MAILADDRESS"
+          git checkout --orphan gh-pages
+          npm run build
+          echo "$GH_PAGES_URL" > dist/CNAME
+          git --work-tree dist add --all
+          git --work-tree dist commit -m "gh-pages"
+          git remote add staging git@github.com:pscheede/staging-env
+          git push staging HEAD:gh-pages --force
