@@ -67,7 +67,7 @@ $b4: 2000px;
   margin-top: 20vh;
 
   .occupation {
-    font-size: 3rem;
+    font-size: 2rem;
     font-weight: 500;
     margin-bottom: 1rem;
 
@@ -80,6 +80,12 @@ $b4: 2000px;
     font-size: 1.5rem;
     font-weight: 300;
     margin-bottom: 1rem;
+  }
+
+  @media only screen and (min-width: 480px) {
+    .occupation {
+      font-size: 3rem;
+    }
   }
 
   @media only screen and (min-width: $b1) {
