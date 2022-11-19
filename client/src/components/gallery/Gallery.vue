@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import LazyImage from './LazyImage.vue';
-import {onMounted, ref, watch} from "vue";
-import {routePath} from "../routePath";
+import {computed, onMounted, ref, watch} from "vue";
 import Header from "../Header.vue";
+import {useRoute, useRouter} from "vue-router";
 
 interface Image {
   url: string;
@@ -10,81 +10,62 @@ interface Image {
   sizes: { [key: string]: { url: string, width: number } };
 }
 
+// http://localhost:3000/image/DSC07406.jpg/show
+
+const route = useRoute();
+const router = useRouter();
+
 function getSizes(img: Image): { [key: number]: string } {
   return Object.fromEntries(Object.entries(img.sizes).map(([, {url, width}]) => [width, url]));
 }
 
-let large = ref<boolean>(false);
-
 let images = ref<Image[]>([]);
 
-let currentIndex = ref(-5);
+const NONE_SELECTED = -5;
+
+const currentIdx = computed(() => {
+  const newIndex = images.value.map((img) => img.filename).indexOf((route.params.img as string));
+  return newIndex !== -1 ? newIndex : NONE_SELECTED;
+})
+const isLarge = computed(() => currentIdx.value !== NONE_SELECTED);
+
+watch(currentIdx, (newVal) => {
+  if (newVal === NONE_SELECTED && route.params.img) {
+    router.replace('/gallery');
+  }
+});
 
 function hasNextImage() {
-  return currentIndex.value < images.value.length - 1;
+  return currentIdx.value < images.value.length - 1;
 }
 
 function hasPrevImage() {
-  return currentIndex.value > 0;
+  return currentIdx.value > 0;
 }
 
 function nextImage() {
   if (!hasNextImage()) return;
 
-  currentIndex.value++;
-  setQueryString();
+  router.replace(`/image/${images.value.at(currentIdx.value + 1)!.filename}/show`);
 }
 
 function prevImage() {
   if (!hasPrevImage()) return;
 
-  currentIndex.value--;
-  setQueryString();
+  router.replace(`/image/${images.value.at(currentIdx.value - 1)!.filename}/show`);
 }
 
 function closeImage() {
   if (openedFromGallery) {
     history.back();
   } else {
-    currentIndex.value = -5;
-    large.value = false;
-    setQueryString();
+    openedFromGallery = true;
+    router.replace(`/gallery`);
   }
 }
 
 // http://localhost:3000/#/image/_DSC1652.jpg
 
-function setQueryString() {
-
-  const newUrl = new URL(window.location.href);
-  if (currentIndex.value < 0) {
-    newUrl.hash = '/gallery';
-  } else {
-    const currentImg = images.value.at(currentIndex.value)!;
-    newUrl.hash = `/image/${currentImg.filename}`
-  }
-  window.history.replaceState(null, '', newUrl.href)
-}
-
-async function setLargeView(newPath: string) {
-  if (newPath.startsWith('/image')) {
-    const filename = newPath.split('/').pop()!;
-    const newIndex = images.value.map((img) => img.filename).indexOf(filename);
-    if (newIndex !== -1) {
-      currentIndex.value = newIndex;
-      large.value = true;
-    } else {
-      currentIndex.value = -5;
-      large.value = false;
-      setQueryString();
-    }
-  } else {
-    large.value = false;
-    currentIndex.value = -5;
-  }
-}
-
-watch(routePath, setLargeView);
 
 let openedFromGallery = true;
 
@@ -94,10 +75,12 @@ onMounted(async () => {
 
   images.value = json.docs
 
-  await setLargeView(routePath.value);
-
-  if (large.value) {
+  if (route.params.img) {
     openedFromGallery = false;
+
+    if (currentIdx.value === NONE_SELECTED) {
+      await router.replace('/gallery');
+    }
   }
 });
 
@@ -119,14 +102,14 @@ function startHideControls() {
 </script>
 
 <template>
-  <Header v-if="!large"></Header>
-  <div v-show="!large" class="overview">
-    <a v-for="(img) in images" :href="`#/image/${ img.filename }`">
+  <Header v-if="!isLarge"></Header>
+  <div v-show="!isLarge" class="overview">
+    <router-link v-for="(img) in images" :to="`/image/${ img.filename }/show`">
       <img :src="img.sizes.thumbnail.url" alt="">
-    </a>
+    </router-link>
   </div>
-  <div v-show="large" class="container" @mousemove="mouseMove">
-    <LazyImage v-for="(img, idx) in images" :source="img.url" :index="idx" :current-index="currentIndex"
+  <div v-show="isLarge" class="container" @mousemove="mouseMove">
+    <LazyImage v-for="(img, idx) in images" :source="img.url" :index="idx" :current-index="currentIdx"
                :sizes="getSizes(img)" @next="nextImage" @prev="prevImage"></LazyImage>
     <div :class="{ show : showControls && hasPrevImage(), control: true }" @click="prevImage" id="left">&lt;</div>
     <div :class="{ show : showControls && hasNextImage(), control: true }" @click="nextImage" id="right">&gt;</div>

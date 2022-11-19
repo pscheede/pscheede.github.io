@@ -10,7 +10,8 @@
   "dependencies": {
     "hammerjs": "^2.0.8",
     "vue": "^3.2.25",
-    "vue-i18n": "^9.1.10"
+    "vue-i18n": "^9.1.10",
+    "vue-router": "^4.1.6"
   },
   "devDependencies": {
     "@intlify/vite-plugin-vue-i18n": "^3.4.0",

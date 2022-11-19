@@ -1,3 +1,22 @@
+<script setup lang="ts">
+import {useI18n} from "vue-i18n";
+
+const t = useI18n();
+</script>
+
+<i18n lang="yaml">
+de:
+  photographer: Hobbyfotograf
+  gallery: Bildergalerie
+  check_out: 'Links:'
+  instagram: Instagram
+en:
+  photographer: Amateur Photographer
+  gallery: photo gallery
+  check_out: 'check out:'
+  instagram: instagram
+</i18n>
+
 <template>
   <div class="row">
     <div class="container">
@@ -5,20 +24,15 @@
       <h2>{{ t.t('photographer') }}</h2>
     </div>
     <div class="container links">
-      <h3 class="check-out">{{ t.t('check_out' )}}</h3>
+      <h3 class="check-out">{{ t.t('check_out') }}</h3>
       <ul>
-        <li><a href="#/gallery">{{ t.t('gallery') }}</a></li>
-        <li><a href="https://instagram.com/photos_by_philipp" target="_blank" rel="noopener noreferrer">{{ t.t('instagram') }}</a></li>
+        <li><router-link to="/gallery">{{ t.t('gallery') }}</router-link></li>
+        <li><a href="https://instagram.com/photos_by_philipp" target="_blank"
+               rel="noopener noreferrer">{{ t.t('instagram') }}</a></li>
       </ul>
     </div>
   </div>
 </template>
-
-<script setup lang="ts">
-import {useI18n} from "vue-i18n";
-
-const t = useI18n();
-</script>
 
 <style scoped lang="scss">
 $b1: 900px;
@@ -135,15 +149,3 @@ a {
 }
 </style>
 
-<i18n lang="yaml">
-de:
-  photographer: Hobbyfotograf
-  gallery: Bildergalerie
-  check_out: 'Links:'
-  instagram: Instagram
-en:
-  photographer: Amateur Photographer
-  gallery: photo gallery
-  check_out: 'check out:'
-  instagram: instagram
-</i18n>

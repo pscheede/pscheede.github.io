@@ -1,5 +1,5 @@
 <template>
-  <div><a href="#"><img src="/public/favicon.ico" alt=""><span>Philipp Scheede</span></a></div>
+  <div><router-link to="/"><img src="/favicon.ico" alt=""><span>Philipp Scheede</span></router-link></div>
 </template>
 
 <script setup lang="ts">
