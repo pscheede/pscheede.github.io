@@ -10,8 +10,6 @@ interface Image {
   sizes: { [key: string]: { url: string, width: number } };
 }
 
-// http://localhost:3000/image/DSC07406.jpg/show
-
 const route = useRoute();
 const router = useRouter();
 
