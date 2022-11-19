@@ -130,13 +130,13 @@ a {
     background-color: white;
 
     &.instagram {
-      mask: url(./src/assets/instagram-icon.svg);
-      -webkit-mask: url(./src/assets/instagram-icon.svg);
+      mask: url(/instagram-icon.svg);
+      -webkit-mask: url(/instagram-icon.svg);
     }
 
     &.github {
-      mask: url(./src/assets/github-icon.svg);
-      -webkit-mask: url(./src/assets/github-icon.svg);
+      mask: url(/github-icon.svg);
+      -webkit-mask: url(/github-icon.svg);
     }
 
     &.github, &.instagram {
