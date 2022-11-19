@@ -5,7 +5,7 @@ import router from "@/router";
 
 const i18n = createI18n({
     legacy: false,
-    locale: navigator.language.split('-')[0],
+    locale: 'de',
     fallbackLocale: 'en',
 });
 
