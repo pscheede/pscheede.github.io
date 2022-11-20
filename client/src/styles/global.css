@@ -1,5 +1,7 @@
 :root {
-    --text-color: #eee;
+    --text: #ddd;
+    --text-medium: #bbb;
+    --text-disabled: #777;
     --text-color-highlight: #ccc;
 
     --bg-color: #02181A;

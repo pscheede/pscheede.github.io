@@ -69,6 +69,6 @@
 
 <style scoped>
 .impressum {
-  color: var(--text-color);
+  color: var(--text);
 }
 </style>

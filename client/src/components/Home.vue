@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import {useI18n} from "vue-i18n";
 import Header from "@/components/Header.vue";
+import NavigationCard from "@/components/NavigationCard.vue";
 
 const {t} = useI18n();
 </script>
@@ -8,20 +9,20 @@ const {t} = useI18n();
 <i18n lang="yaml">
 de:
   greeting: Hi, ich bin Philipp
-  dev: Softwareentwickler,
-  photo: Portrait- und Landschaftsfotograf
-  photographer: Hobbyfotograf
-  gallery: Bildergalerie
-  check_out: 'Links:'
-  instagram: Instagram
+  developer: Softwareentwickler,
+  photographer: Portrait- und Landschaftsfotograf
+  portraits: Portraits
+  landscape_and_nature: Landschaft und Natur
+  software_projects: Softwareprojekte
+  coming_soon: Bald verfügbar...
 en:
   greeting: Hi, I'm Philipp
-  dev: Software Developer,
-  photo: Portrait and Landscape Photographer
-  photographer: Amateur Photographer
-  gallery: photo gallery
-  check_out: 'check out:'
-  instagram: instagram
+  developer: Software Developer,
+  photographer: Portrait and Landscape Photographer
+  portraits: Portraits
+  landscape_and_nature: Landscape and Nature
+  software_projects: Software Projects
+  coming_soon: Coming soon...
 </i18n>
 
 <template>
@@ -38,12 +39,17 @@ en:
        -->
 
       <div class="greeting">
-        <span>{{ t('greeting') }}</span>
+        <h1>{{ t('greeting') }}</h1>
       </div>
       <div class="occupation">
-        <span>{{ t('dev') }}</span>
-        <br>
-        <span>{{ t('photo') }}</span>
+        <h1>{{ t('developer') }}</h1>
+        <h1>{{ t('photographer') }}</h1>
+      </div>
+
+      <div class="cards">
+        <NavigationCard to="/gallery" title="Portraits" image="/_DSC4827.jpg"/>
+        <NavigationCard to="/gallery" title="Landscape and Nature" image="/_DSC4827.jpg"/>
+        <NavigationCard title="Software Projects" image="/_DSC4827.jpg" :subtitle="t('coming_soon')"/>
       </div>
     </div>
   </div>
@@ -56,7 +62,7 @@ $b3: 1400px;
 $b4: 2000px;
 
 .container {
-  color: var(--text-color);
+  color: var(--text-medium);
   font-family: 'Cormoramt Garamond', serif;
 
   display: flex;
@@ -64,7 +70,15 @@ $b4: 2000px;
 
   align-items: center;
 
-  margin-top: 20vh;
+  padding-top: 20vh;
+  padding-bottom: 4rem;
+
+  h1 {
+    margin: 0;
+    padding: 0;
+
+    font-size: inherit;
+  }
 
   .occupation {
     font-size: 2rem;
@@ -74,12 +88,28 @@ $b4: 2000px;
     max-width: 80%;
 
     text-align: center;
+
+    color: var(--text);
   }
 
   .greeting {
     font-size: 1.5rem;
     font-weight: 300;
     margin-bottom: 1rem;
+  }
+
+  .cards {
+    margin-top: 10rem;
+
+    width: calc(100% - 6rem);
+
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+
+    gap: 3rem;
+
+    justify-content: center;
   }
 
   @media only screen and (min-width: 480px) {
@@ -91,6 +121,9 @@ $b4: 2000px;
   @media only screen and (min-width: $b1) {
     .occupation {
       font-size: 5rem;
+    }
+    .greeting {
+      font-size: 2rem;
     }
   }
 

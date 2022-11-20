@@ -19,7 +19,7 @@ function changeLanguage(lang: 'de' | 'en') {
 <style scoped lang="scss">
 .language {
   display: none;
-  color: var(--text-color);
+  color: var(--text);
 
   cursor: pointer;
 

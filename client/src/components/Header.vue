@@ -48,7 +48,7 @@ en:
   justify-content: space-between;
   align-items: center;
 
-  color: var(--text-color);
+  color: var(--text-medium);
 
   padding: 2rem 2.5rem;
 
@@ -90,7 +90,7 @@ a {
     cursor: default;
 
     &:not(.no-color) {
-      opacity: 60%;
+      color: var(--text-disabled);
     }
   }
 }
@@ -119,6 +119,10 @@ a {
   align-items: center;
   gap: 1rem;
 
+  .language {
+    margin-right: 1rem;
+  }
+
   .social {
     display: inline-block;
 
@@ -127,7 +131,7 @@ a {
     height: 1.5rem;
     width: 1.5rem;
 
-    background-color: white;
+    background-color: var(--text-medium);
 
     &.instagram {
       mask: url(/instagram-icon.svg);
