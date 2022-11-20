@@ -2,8 +2,18 @@
 import {useI18n} from "vue-i18n";
 import Header from "@/components/Header.vue";
 import NavigationCard from "@/components/NavigationCard.vue";
+import {getHomepageData, HomepageData} from "@/components/service/api";
+import {onMounted, ref} from "vue";
 
 const {t} = useI18n();
+
+const data = ref<HomepageData>();
+
+onMounted(async () => {
+  data.value = await getHomepageData();
+  console.log('wow');
+  console.log(data.value);
+});
 </script>
 
 <i18n lang="yaml">
@@ -47,9 +57,9 @@ en:
       </div>
 
       <div class="cards">
-        <NavigationCard to="/gallery" title="Portraits" image="/_DSC4827.jpg"/>
-        <NavigationCard to="/gallery" title="Landscape and Nature" image="/_DSC4827.jpg"/>
-        <NavigationCard title="Software Projects" image="/_DSC4827.jpg" :subtitle="t('coming_soon')"/>
+        <NavigationCard to="/gallery" title="Portraits" :image="data?.portraitPhotoUrl"/>
+        <NavigationCard to="/gallery" title="Landscape and Nature" :image="data?.landscapePhotoUrl"/>
+        <NavigationCard title="Software Projects" :image="data?.softwarePhotoUrl" :subtitle="t('coming_soon')"/>
       </div>
     </div>
   </div>

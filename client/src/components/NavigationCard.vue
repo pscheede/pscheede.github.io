@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import {useRouter} from "vue-router";
+import {useI18n} from "vue-i18n";
 
 interface Props {
   title: string;
   subtitle?: string;
-  image: string;
+  image: string | undefined;
   to?: string;
 }
 
@@ -20,12 +21,22 @@ function navigate() {
     router.push(props.to);
   }
 }
+
+const { t } = useI18n();
 </script>
+
+<i18n>
+de:
+  loading: Kein Bild verfügbar
+en:
+  loading: No image available
+</i18n>
 
 <template>
   <div class="navigation-card" @click="navigate" :class="{'has-target': props.to !== undefined}">
     <div class="image">
-      <img :src="props.image" alt="Navigation card image" />
+      <img v-if="props.image !== undefined" :src="props.image" alt="Navigation card image" />
+      <span v-else class="loading">{{ t('loading') }}</span>
     </div>
     <div class="content">
       <h2>{{ props.title }}</h2>
@@ -64,13 +75,26 @@ function navigate() {
   }
 
   .image {
+    $imageHeight: 300px;
     width: 100%;
-    height: 300px;
+    height: $imageHeight;
 
     img {
       width: 100%;
-      height: 100%;
+      height: $imageHeight;
       object-fit: cover;
+    }
+
+    .loading {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      width: 100%;
+      height: $imageHeight;
+
+      color: var(--text-disabled);
+      background-color: rgb(0, 0, 0, 0.1);
     }
   }
 
