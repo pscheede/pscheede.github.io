@@ -13,19 +13,14 @@ export async function getHomepageData(): Promise<HomepageData> {
             Authorization: `Bearer ${API_TOKEN}`,
         },
     });
-    console.log(resp)
     if (!resp.ok) {
         throw new Error('Failed to fetch homepage data');
     }
     const json = await resp.json();
 
-    console.log(json);
-
-    const result = {
+    return {
         landscapePhotoUrl: API_URL + json.data.attributes.landscape_card.data.attributes.formats.medium.url,
         portraitPhotoUrl: API_URL + json.data.attributes.portrait_card.data.attributes.formats.medium.url,
         softwarePhotoUrl: API_URL + json.data.attributes.software_card.data.attributes.formats.medium.url,
     };
-    console.log('result', result);
-    return result
 }

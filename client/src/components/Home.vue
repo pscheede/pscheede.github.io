@@ -11,8 +11,6 @@ const data = ref<HomepageData>();
 
 onMounted(async () => {
   data.value = await getHomepageData();
-  console.log('wow');
-  console.log(data.value);
 });
 </script>
 
@@ -57,9 +55,9 @@ en:
       </div>
 
       <div class="cards">
-        <NavigationCard to="/gallery" title="Portraits" :image="data?.portraitPhotoUrl"/>
-        <NavigationCard to="/gallery" title="Landscape and Nature" :image="data?.landscapePhotoUrl"/>
-        <NavigationCard title="Software Projects" :image="data?.softwarePhotoUrl" :subtitle="t('coming_soon')"/>
+        <NavigationCard to="/gallery" :title="t('portraits')" :image="data?.portraitPhotoUrl"/>
+        <NavigationCard to="/gallery" :title="t('landscape_and_nature')" :image="data?.landscapePhotoUrl"/>
+        <NavigationCard :title="t('software_projects')" :image="data?.softwarePhotoUrl" :subtitle="t('coming_soon')"/>
       </div>
     </div>
   </div>

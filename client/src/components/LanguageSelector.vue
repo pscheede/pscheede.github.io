@@ -4,7 +4,6 @@ import {useI18n} from "vue-i18n";
 const {locale} = useI18n();
 
 function changeLanguage(lang: 'de' | 'en') {
-  console.log('change language to', lang);
   locale.value = lang;
 }
 </script>
