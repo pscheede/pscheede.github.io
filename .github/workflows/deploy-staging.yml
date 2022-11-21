@@ -1,4 +1,4 @@
-name: Deploy frontend to github pages
+name: Deploy frontend to github pages (staging)
 on:
   pull_request:
     paths:
@@ -35,6 +35,8 @@ jobs:
           GIT_MAILADDRESS: ${{ secrets.GIT_MAILADDRESS }}
           GH_PAGES_URL: ${{ secrets.GH_PAGES_STAGING_URL }}
           VITE_API_URL: ${{ secrets.VITE_API_URL }}
+          VITE_STRAPI_URL: ${{ secrets.VITE_STRAPI_URL }}
+          VITE_STRAPI_KEY: ${{ secrets.VITE_STRAPI_KEY }}
         run: |
           git config user.name "$GIT_USERNAME" && git config user.email "$GIT_MAILADDRESS"
           git checkout --orphan gh-pages
