@@ -136,7 +136,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="container">
+  <div class="container lazy-image-host">
     <picture ref="picture">
       <source v-for="(value, key) in _sizes" v-if="scale === 1" :media="`(max-width: ${key / pixelRatio}px)`"
               :srcset="value">

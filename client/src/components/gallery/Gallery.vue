@@ -100,18 +100,20 @@ function startHideControls() {
 </script>
 
 <template>
-  <Header v-if="!isLarge"></Header>
-  <div v-show="!isLarge" class="overview">
-    <router-link v-for="(img) in images" :to="`/image/${ img.filename }/show`">
-      <img :src="img.sizes.thumbnail.url" alt="">
-    </router-link>
-  </div>
-  <div v-show="isLarge" class="container" @mousemove="mouseMove">
-    <LazyImage v-for="(img, idx) in images" :source="img.url" :index="idx" :current-index="currentIdx"
-               :sizes="getSizes(img)" @next="nextImage" @prev="prevImage"></LazyImage>
-    <div :class="{ show : showControls && hasPrevImage(), control: true }" @click="prevImage" id="left">&lt;</div>
-    <div :class="{ show : showControls && hasNextImage(), control: true }" @click="nextImage" id="right">&gt;</div>
-    <div :class="{ show : showControls, control: true }" @click="closeImage" id="close">x</div>
+  <div class="gallery-host">
+    <Header v-if="!isLarge"></Header>
+    <div v-show="!isLarge" class="overview">
+      <router-link v-for="(img) in images" :to="`/image/${ img.filename }/show`">
+        <img :src="img.sizes.thumbnail.url" alt="">
+      </router-link>
+    </div>
+    <div v-show="isLarge" class="container lazy-image-background" @mousemove="mouseMove">
+      <LazyImage v-for="(img, idx) in images" :source="img.url" :index="idx" :current-index="currentIdx"
+                 :sizes="getSizes(img)" @next="nextImage" @prev="prevImage"></LazyImage>
+      <div :class="{ show : showControls && hasPrevImage(), control: true }" @click="prevImage" id="left">&lt;</div>
+      <div :class="{ show : showControls && hasNextImage(), control: true }" @click="nextImage" id="right">&gt;</div>
+      <div :class="{ show : showControls, control: true }" @click="closeImage" id="close">x</div>
+    </div>
   </div>
 </template>
 
@@ -220,5 +222,9 @@ function startHideControls() {
   position: fixed;
   right: 1rem;
   top: 1rem;
+}
+
+.lazy-image-background {
+  background-color: #131718;
 }
 </style>
