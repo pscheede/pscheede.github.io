@@ -1,8 +1,5 @@
 import {createRouter, createWebHistory} from "vue-router";
 
-import Home from './components/Home.vue'
-import Gallery from './components/gallery/Gallery.vue'
-
 const router = createRouter({
     history: createWebHistory(),
     routes: [
@@ -12,15 +9,23 @@ const router = createRouter({
         },
         {
             path: '/',
-            component: Home,
+            component: () => import('./components/Home.vue'),
+        },
+        {
+            path: '/about',
+            component: () => import('./components/ActiveDevelopment.vue'),
+        },
+        {
+            path: '/contact',
+            component: () => import('./components/ActiveDevelopment.vue'),
         },
         {
             path: '/gallery',
-            component: Gallery,
+            component: () => import('./components/gallery/Gallery.vue'),
         },
         {
             path: '/image/:img/show',
-            component: Gallery,
+            component: () => import('./components/gallery/Gallery.vue'),
         },
     ]
 });

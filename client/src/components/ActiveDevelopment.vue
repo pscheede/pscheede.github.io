@@ -7,11 +7,11 @@ const { t } = useI18n();
 
 <i18n>
 de:
-  under_development: "Diese Seite befindet sich noch im Aufbau..."
-  back: "Zurück zur Startseite"
+  under_development: "Diese Seite befindet sich noch im Aufbau"
+  back: "Zurück zur Startseite..."
 en:
-  under_development: "This page is still under development..."
-  back: "Back to home page"
+  under_development: "This page is still under development"
+  back: "Back to home page..."
 </i18n>
 
 <template>
@@ -38,18 +38,22 @@ en:
   justify-content: center;
   align-items: center;
 
-  color: var(--text-color);
+  color: var(--text-medium);
 
   z-index: -20;
 
   a {
     color: inherit;
 
-    font-size: 1.5rem;
+    font-size: 1.25rem;
     margin-top: 2rem;
 
-    &:hover {
-      color: var(--text-color-highlight);
+    text-decoration: none;
+
+    @media (hover: hover) and (pointer: fine) {
+      &:hover {
+        color: var(--primary-dark);
+      }
     }
   }
 }
