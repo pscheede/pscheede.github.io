@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {useI18n} from "vue-i18n";
-import Header from "@/components/Header.vue";
+import Header from "@/components/Navigation/Header.vue";
 
 const { t } = useI18n();
 </script>

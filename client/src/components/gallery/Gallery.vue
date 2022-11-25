@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import LazyImage from './LazyImage.vue';
 import {computed, onMounted, ref, watch} from "vue";
-import Header from "../Header.vue";
+import Header from "../Navigation/Header.vue";
 import {useRoute, useRouter} from "vue-router";
 
 interface Image {
