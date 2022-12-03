@@ -99,7 +99,7 @@ function startHideControls() {
 
   timeout = setTimeout(() => {
     showControls.value = false;
-  }, 1500);
+  }, 1000);
 }
 
 const rightRef = ref<HTMLDivElement>();
@@ -231,8 +231,10 @@ function leave() {
     opacity: 0;
 
     &.show {
-      visibility: visible;
-      opacity: 1;
+      @media (hover: hover) and (pointer: fine) {
+        visibility: visible;
+        opacity: 1;
+      }
 
       transition: visibility 0ms 0ms, opacity 200ms linear 0ms;
     }
