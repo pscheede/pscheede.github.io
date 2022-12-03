@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import LazyImage from './LazyImage.vue';
-import {computed, onMounted, ref, watch} from "vue";
+import {computed, onBeforeUnmount, onMounted, ref, watch} from "vue";
 import Header from "../Navigation/Header.vue";
 import {useRoute, useRouter} from "vue-router";
 
@@ -82,8 +82,10 @@ onMounted(async () => {
   }
 });
 
-let showControls = ref(false);
+let showControls = ref(true);
 let timeout: number;
+
+let stopFlag = false;
 
 function mouseMove() {
   showControls.value = true;
@@ -92,11 +94,49 @@ function mouseMove() {
 
 function startHideControls() {
   clearTimeout(timeout);
+
+  if (stopFlag) return;
+
   timeout = setTimeout(() => {
     showControls.value = false;
   }, 1500);
 }
 
+const rightRef = ref<HTMLDivElement>();
+const leftRef = ref<HTMLDivElement>();
+const closeRef = ref<HTMLDivElement>();
+
+onMounted(() => {
+  startHideControls();
+
+  rightRef.value?.addEventListener('pointerenter', enter);
+  leftRef.value?.addEventListener('pointerenter', enter);
+  closeRef.value?.addEventListener('pointerenter', enter);
+
+  rightRef.value?.addEventListener('pointerleave', leave);
+  leftRef.value?.addEventListener('pointerleave', leave);
+  closeRef.value?.addEventListener('pointerleave', leave);
+});
+
+onBeforeUnmount(() => {
+  rightRef.value?.removeEventListener('pointerenter', enter);
+  leftRef.value?.removeEventListener('pointerenter', enter);
+  closeRef.value?.removeEventListener('pointerenter', enter);
+
+  rightRef.value?.removeEventListener('pointerleave', leave);
+  leftRef.value?.removeEventListener('pointerleave', leave);
+  closeRef.value?.removeEventListener('pointerleave', leave);
+});
+
+function enter() {
+  clearTimeout(timeout);
+  stopFlag = true;
+}
+
+function leave() {
+  startHideControls();
+  stopFlag = false;
+}
 </script>
 
 <template>
@@ -110,9 +150,9 @@ function startHideControls() {
     <div v-show="isLarge" class="container lazy-image-background" @mousemove="mouseMove">
       <LazyImage v-for="(img, idx) in images" :source="img.url" :index="idx" :current-index="currentIdx"
                  :sizes="getSizes(img)" @next="nextImage" @prev="prevImage"></LazyImage>
-      <div :class="{ show : showControls && hasPrevImage(), control: true }" @click="prevImage" id="left">&lt;</div>
-      <div :class="{ show : showControls && hasNextImage(), control: true }" @click="nextImage" id="right">&gt;</div>
-      <div :class="{ show : showControls, control: true }" @click="closeImage" id="close">x</div>
+      <div :class="{ show : showControls && hasPrevImage(), control: true }" @click="prevImage" id="left" ref="leftRef">&lt;</div>
+      <div :class="{ show : showControls && hasNextImage(), control: true }" @click="nextImage" id="right" ref="rightRef">&gt;</div>
+      <div :class="{ show : showControls, control: true }" @click="closeImage" id="close" ref="closeRef">x</div>
     </div>
   </div>
 </template>
