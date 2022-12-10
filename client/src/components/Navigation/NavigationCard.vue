@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import {useRouter} from "vue-router";
+import {RouteLocationRaw, useRouter} from "vue-router";
 import {useI18n} from "vue-i18n";
 
 interface Props {
   title: string;
   subtitle?: string;
   image?: string;
-  to?: string;
+  to?: RouteLocationRaw;
 }
 
 const props = withDefaults(defineProps<Props>(), {

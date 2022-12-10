@@ -19,10 +19,18 @@ const { t } = useI18n();
 <template>
   <div class="album-overview-host">
     <Header/>
-    <NavigationCard v-for="album in albums" :key="album.slug" :image="album.coverImageUrl" :title="t(album.titleTextKey)"/>
+    <div class="albums">
+      <NavigationCard v-for="album in albums" :key="album.slug" :image="album.coverImageUrl" :title="t(album.titleTextKey)" :to="{ name: 'gallery', params: { albumSlug: album.slug } }" />
+    </div>
   </div>
 </template>
 
 <style scoped>
-
+.albums {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+  margin: 1rem;
+}
 </style>
