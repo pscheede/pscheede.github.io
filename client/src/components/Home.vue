@@ -166,10 +166,10 @@ $b4: 2000px;
 
   @media only screen and (min-width: $b1) {
     .occupation {
-      font-size: $occupationBaseSize * (4 / 3);
+      font-size: $occupationBaseSize * calc(4 / 3);
     }
     .greeting {
-      font-size: $baseGreetingSize * (4 / 3);
+      font-size: $baseGreetingSize * calc(4 / 3);
     }
     .explanation {
       max-width: 60%;
@@ -190,11 +190,11 @@ $b4: 2000px;
 
   @media only screen and (min-width: $b3) {
     .occupation {
-      font-size: $occupationBaseSize * (5 / 3);
+      font-size: $occupationBaseSize * calc(5 / 3);
     }
 
     .greeting {
-      font-size: $baseGreetingSize * (5 / 3);
+      font-size: $baseGreetingSize * calc(5 / 3);
     }
     .explanation {
       font-size: 1.25rem;
