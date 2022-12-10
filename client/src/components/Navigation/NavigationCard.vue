@@ -5,13 +5,14 @@ import {useI18n} from "vue-i18n";
 interface Props {
   title: string;
   subtitle?: string;
-  image: string | undefined;
+  image?: string;
   to?: string;
 }
 
 const props = withDefaults(defineProps<Props>(), {
   subtitle: undefined,
   to: undefined,
+  image: undefined,
 });
 
 const router = useRouter();
