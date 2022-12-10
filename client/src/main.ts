@@ -7,6 +7,8 @@ const i18n = createI18n({
     legacy: false,
     locale: 'de',
     fallbackLocale: 'en',
+    missingWarn: false,
+    fallbackWarn: false,
 });
 
 const app = createApp(App);
