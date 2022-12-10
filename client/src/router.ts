@@ -27,6 +27,22 @@ const router = createRouter({
             path: '/image/:img/show',
             component: () => import('./components/gallery/Gallery.vue'),
         },
+        {
+            path: '/test',
+            component: () => import('./components/gallery/AlbumOverview.vue'),
+        },
+        {
+            name: 'gallery',
+            path: '/albums/:albumSlug',
+            component: () => import('./components/gallery/AlbumDetail.vue'),
+            props: true,
+        },
+        {
+            name: 'gallery-image',
+            path: '/albums/:albumSlug/:img',
+            component: () => import('./components/gallery/AlbumDetail.vue'),
+            props: true,
+        },
     ]
 });
 
