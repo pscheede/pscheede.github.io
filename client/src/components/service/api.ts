@@ -133,3 +133,21 @@ interface SizeInfo {
     height: number;
     url: string;
 }
+
+export async function getAlbumTranslations(): Promise<Record<'de' | 'en', unknown>> {
+    const resp = await fetch(`${API_URL}/api/translation`, {
+        headers: {
+            Authorization: `Bearer ${API_TOKEN}`,
+        }
+    });
+
+    if (!resp.ok) {
+        throw new Error('Failed to fetch album translations');
+    }
+    const json: { data: { attributes: { translations: Record<'de' | 'en', unknown> }}} = await resp.json();
+
+    return {
+        de: json.data.attributes.translations.de,
+        en: json.data.attributes.translations.en,
+    };
+}

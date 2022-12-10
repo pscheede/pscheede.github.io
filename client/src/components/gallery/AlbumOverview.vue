@@ -3,17 +3,23 @@ import Header from "@/components/Navigation/Header.vue";
 import {AlbumInfos, getAlbums} from "@/components/service/api";
 import {onMounted, ref, Ref} from "vue";
 import NavigationCard from "@/components/Navigation/NavigationCard.vue";
+import {useAlbumTranslations} from "@/components/gallery/AlbumTranslations";
+import {useI18n} from "vue-i18n";
 
 const albums: Ref<AlbumInfos[]> = ref([]);
 onMounted(async () => {
   albums.value.push(...await getAlbums());
 });
+
+useAlbumTranslations();
+
+const { t } = useI18n();
 </script>
 
 <template>
   <div class="album-overview-host">
     <Header/>
-    <NavigationCard v-for="album in albums" :key="album.slug" :image="album.coverImageUrl" :title="album.titleTextKey"/>
+    <NavigationCard v-for="album in albums" :key="album.slug" :image="album.coverImageUrl" :title="t(album.titleTextKey)"/>
   </div>
 </template>
 
