@@ -65,8 +65,6 @@ en:
 import {useI18n} from "vue-i18n";
 import licensesText from '@/licenses.txt?raw';
 
-console.log(licensesText);
-
 const {t} = useI18n();
 </script>
 
