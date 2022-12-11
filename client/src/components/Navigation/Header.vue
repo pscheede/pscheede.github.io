@@ -1,8 +1,9 @@
 <script lang="ts" setup>
 import {useI18n} from "vue-i18n";
 import LanguageSelector from "@/components/LanguageSelector.vue";
-import {computed, onMounted, onUnmounted, ref} from "vue";
+import {computed, onMounted, onUnmounted, ref, watch} from "vue";
 import HamburgerButton from "@/components/Navigation/HamburgerButton.vue";
+import {useRoute} from "vue-router";
 
 const {t} = useI18n();
 
@@ -26,6 +27,11 @@ onUnmounted(() => {
 
 const enableMenu = computed(() => {
   return width.value < breakPoint;
+});
+
+const route = useRoute();
+watch(route, () => {
+  menuActive.value = false;
 });
 </script>
 

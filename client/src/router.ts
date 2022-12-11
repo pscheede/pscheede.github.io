@@ -1,5 +1,14 @@
 import {createRouter, createWebHistory} from "vue-router";
 
+import 'vue-router'
+
+declare module 'vue-router' {
+    interface RouteMeta {
+        disableHeader?: boolean;
+        disableFooter?: boolean;
+    }
+}
+
 const router = createRouter({
     history: createWebHistory(),
     routes: [
@@ -34,6 +43,11 @@ const router = createRouter({
             path: '/albums/:albumSlug/:img',
             component: () => import('./components/gallery/AlbumDetail.vue'),
             props: true,
+            meta: { disableHeader: true, disableFooter: true },
+        },
+        {
+            path: '/impressum',
+            component: () => import('./components/Impressum.vue'),
         },
     ]
 });

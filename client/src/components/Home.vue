@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import {useI18n} from "vue-i18n";
-import Header from "@/components/Navigation/Header.vue";
 import NavigationCard from "@/components/Navigation/NavigationCard.vue";
 import {getHomepageData, HomepageData} from "@/components/service/api";
 import {onMounted, ref} from "vue";
@@ -41,17 +40,7 @@ en:
 
 <template>
   <div class="home-host">
-    <Header/>
-
     <div class="container">
-      <!--
-        Required stuff
-        - greeting
-        - name
-        - occupation
-        - links (gallery, instagram)
-       -->
-
       <div class="greeting">
         <h1>{{ t('greeting') }}</h1>
       </div>

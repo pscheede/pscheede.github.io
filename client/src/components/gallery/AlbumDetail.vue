@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 import LazyImage from './LazyImage.vue';
 import {computed, onBeforeUnmount, onMounted, ref, watch} from "vue";
-import Header from "../Navigation/Header.vue";
 import {useRouter} from "vue-router";
 import {AlbumImage, getImagesForAlbum} from "@/components/service/api";
 
@@ -136,7 +135,6 @@ function leave() {
 
 <template>
   <div class="gallery-host">
-    <Header v-if="!isLarge"></Header>
     <div v-show="!isLarge" class="overview">
       <router-link v-for="(img) in images"
                    :to="{ name: 'gallery-image', params: { albumSlug: props.albumSlug, img: img.filename } }">

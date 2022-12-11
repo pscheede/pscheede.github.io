@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import {useI18n} from "vue-i18n";
-import Header from "@/components/Navigation/Header.vue";
 
 const { t } = useI18n();
 </script>
@@ -15,7 +14,6 @@ en:
 </i18n>
 
 <template>
-    <Header />
     <div class="text">
       <span>{{ t('under_development') }}</span>
       <a href="/">{{ t('back') }}</a>
@@ -24,12 +22,7 @@ en:
 
 <style scoped lang="scss">
 .text {
-  position: fixed;
-
-  top: 0;
-  left: 0;
-
-  height: 100%;
+  min-height: 60vh;
   width: 100%;
 
   display: flex;
