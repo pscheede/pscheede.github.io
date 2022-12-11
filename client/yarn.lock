@@ -1599,9 +1599,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"personal website@workspace:.":
+"personal_website@workspace:.":
   version: 0.0.0-use.local
-  resolution: "personal website@workspace:."
+  resolution: "personal_website@workspace:."
   dependencies:
     "@intlify/vite-plugin-vue-i18n": ^6.0.3
     "@types/hammerjs": ^2.0.41

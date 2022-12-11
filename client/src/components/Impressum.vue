@@ -6,6 +6,11 @@ de:
   privacy_policy: Datenschutz
   privacy_policy_text: Die Nutzung dieser Webseite ist ohne Angabe personenbezogener Daten möglich. Es werden keinerlei Cookies verwendet.
   privacy_policy_part2: Der Nutzung von im Rahmen der Impressumspflicht veröffentlichten Kontaktdaten durch Dritte zur Übersendung von nicht ausdrücklich angeforderter Werbung und Informationsmaterialien wird hiermit ausdrücklich widersprochen. Der Betreiber dieser Seite behält sich ausdrücklich rechtliche Schritte im Falle der unverlangten Zusendung von Werbeinformationen, etwa durch Spam-Mails, vor.
+  open_source: Open Source Lizenzen
+  open_source_text:
+    Diese Webseite verwendet Open Source Software, deren Lizenzen zusammen mit dieser Website ausgeliefert werden müssen.
+    Die Lizenzen sind im folgenden Abschnitt aufgeführt. Dieser Abschnitt wurde automatisch generiert und liegt daher nur in englischer Sprache vor.
+  click_to_open: Klicken um zu öffnen
 en:
   impressum: Legal Notice
   copyright: Copyright
@@ -13,6 +18,11 @@ en:
   privacy_policy: Privacy policy
   privacy_policy_text: The use of this website is possible without providing personal data. No cookies of any kind are used.
   privacy_policy_part2: The use of contact data published within the framework of the legal notice obligation by third parties for the purpose of sending unsolicited advertising and information material is hereby expressly prohibited. The operators of the pages expressly reserve the right to take legal action in the event of the unsolicited sending of advertising information, such as spam e-mails.
+  open_source: Open Source Licenses
+  open_source_text:
+    This website uses open source software, the licenses of which must be delivered with this website.
+    The licenses are listed in the following auto-generated section.
+  click_to_open: Click to open
 </i18n>
 
 <template>
@@ -31,16 +41,31 @@ en:
         {{ t('copyright_text') }}
         <br><br>
         <strong>{{ t('privacy_policy') }}</strong><br><br>
-        {{ t('privacy_policy_text')}}
+        {{ t('privacy_policy_text') }}
         <br><br>
-        {{ t('privacy_policy_part2')}}
+        {{ t('privacy_policy_part2') }}
+        <br><br>
+        <strong>{{ t('open_source') }}</strong><br><br>
+        {{ t('open_source_text') }}
       </p>
+
+      <div class="licenses">
+        <details>
+          <summary>{{ t('click_to_open') }}</summary>
+          <div class="content">
+            {{ licensesText }}
+          </div>
+        </details>
+      </div>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
 import {useI18n} from "vue-i18n";
+import licensesText from '@/licenses.txt?raw';
+
+console.log(licensesText);
 
 const {t} = useI18n();
 </script>
@@ -70,6 +95,24 @@ const {t} = useI18n();
 
   .main-content {
     margin-top: 2rem;
+  }
+
+  .licenses {
+    white-space: pre-wrap;
+
+    padding: 1rem;
+    margin-top: 2rem;
+
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: 0.5rem;
+
+    .content {
+      margin-top: 1rem;
+    }
+
+    summary {
+      cursor: pointer;
+    }
   }
 
   a {
