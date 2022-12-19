@@ -144,10 +144,72 @@ export async function getAlbumTranslations(): Promise<Record<'de' | 'en', unknow
     if (!resp.ok) {
         throw new Error('Failed to fetch album translations');
     }
-    const json: { data: { attributes: { translations: Record<'de' | 'en', unknown> }}} = await resp.json();
+    const json: { data: { attributes: { translations: Record<'de' | 'en', unknown> } } } = await resp.json();
 
     return {
         de: json.data.attributes.translations.de,
         en: json.data.attributes.translations.en,
+    };
+}
+
+export async function getCategories(): Promise<string[]> {
+    const resp = await fetch(`${API_URL}/api/categories`, {
+        headers: {
+            Authorization: `Bearer ${API_TOKEN}`,
+        }
+    });
+
+    if (!resp.ok) {
+        throw new Error('Failed to fetch categories');
+    }
+    const json = await resp.json();
+
+    return json.data.map((category: { attributes: { name_text_key: string } }) => category.attributes.name_text_key);
+}
+
+interface CategoryContent {
+    albums: AlbumInfos[];
+    highlightAlbum?: AlbumInfos;
+}
+
+export async function getCategoryContent(category: string): Promise<CategoryContent> {
+    const resp = await fetch(`${API_URL}/api/categories?filters[name_text_key][$eq]=${category}&populate[0]=albums,highlight_album&populate[1]=albums.coverImage,highlight_album.coverImage`, {
+        headers: {
+            Authorization: `Bearer ${API_TOKEN}`,
+        }
+    });
+
+    if (!resp.ok) {
+        throw new Error('Failed to fetch category content');
+    }
+    const json = await resp.json();
+
+    if (json.data.length < 1) {
+        throw new Error('Category not found');
+    }
+
+    const categoryData = json.data[0];
+
+    const albums: AlbumInfos[] = [];
+    for (const album of categoryData.attributes.albums.data) {
+        albums.push({
+            titleTextKey: album.attributes.titleTextKey,
+            slug: album.attributes.slug,
+            coverImageUrl: API_URL + album.attributes.coverImage.data.attributes.formats.medium.url,
+        });
+    }
+
+    let highlightAlbum: AlbumInfos | undefined = undefined;
+    if (categoryData.attributes.highlight_album.data) {
+        highlightAlbum = {
+            titleTextKey: categoryData.attributes.highlight_album.data.attributes.titleTextKey,
+            slug: categoryData.attributes.highlight_album.data.attributes.slug,
+            coverImageUrl: API_URL + categoryData.attributes.highlight_album.data.attributes.coverImage.data.attributes.formats.medium.url,
+        };
+    }
+
+    return {
+        albums,
+        highlightAlbum,
     };
 }
