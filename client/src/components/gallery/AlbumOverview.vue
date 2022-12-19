@@ -4,6 +4,7 @@ import {onMounted, ref, Ref, watch} from "vue";
 import NavigationCard from "@/components/Navigation/NavigationCard.vue";
 import {useAlbumTranslations} from "@/components/gallery/AlbumTranslations";
 import {useI18n} from "vue-i18n";
+import {useRoute, useRouter} from "vue-router";
 
 const albums: Ref<AlbumInfos[]> = ref([]);
 const highlightAlbum: Ref<AlbumInfos | undefined> = ref(undefined);
@@ -15,25 +16,41 @@ useAlbumTranslations();
 
 const {t, locale} = useI18n();
 
+const route = useRoute();
+const router = useRouter();
+
 onMounted(async () => {
   categories.value = await getCategories();
   categories.value.sort((a, b) => t(a).localeCompare(t(b)));
-  selectedCategory.value = 'categories.all';
+
+  if (route.query.category) {
+    const newCategory = `categories.${ route.query.category }`;
+
+    if (categories.value.includes(newCategory)) {
+      selectedCategory.value = newCategory;
+    } else {
+      selectedCategory.value = 'categories.all';
+    }
+  } else {
+    selectedCategory.value = 'categories.all';
+  }
 });
 
 watch(selectedCategory, async (newCategory) => {
   const categoryContent = await getCategoryContent(newCategory);
   albums.value = categoryContent.albums;
   highlightAlbum.value = categoryContent.highlightAlbum;
+
+  if (newCategory !== 'categories.all') {
+    await router.replace({ path: route.fullPath, query: { category: newCategory.replace('categories.', '') } });
+  } else {
+    await router.replace({ path: route.fullPath, query: {} });
+  }
 });
 
 watch(locale, () => {
   categories.value.sort((a, b) => t(a).localeCompare(t(b)));
 });
-
-function filterAlbums() {
-  console.log(selectedCategory.value);
-}
 </script>
 
 <i18n>
@@ -59,7 +76,7 @@ en:
         <!-- Dropdown for filtering by category -->
         <p>{{ t('select_category') }}</p>
         <div class="dropdown">
-          <select v-model="selectedCategory" @change="filterAlbums">
+          <select v-model="selectedCategory">
             <option v-for="category in categories" :key="category" :value="category">{{ t(category) }}</option>
           </select>
         </div>
