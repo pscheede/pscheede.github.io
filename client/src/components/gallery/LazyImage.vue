@@ -136,7 +136,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="container">
+  <div class="lazy-image-container lazy-image-host">
     <picture ref="picture">
       <source v-for="(value, key) in _sizes" v-if="scale === 1" :media="`(max-width: ${key / pixelRatio}px)`"
               :srcset="value">
@@ -147,7 +147,7 @@ onUnmounted(() => {
 
 
 <style scoped>
-.container {
+.lazy-image-container {
   position: absolute;
   top: 0;
   left: 0;
@@ -179,6 +179,13 @@ img, picture {
   /*user-select: none;*/
 
   /*box-shadow: 5px 5px 50px -1px #000;*/
+}
+
+picture {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 </style>

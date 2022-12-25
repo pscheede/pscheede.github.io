@@ -1,7 +1,12 @@
 :root {
-    --text-color: #eee;
+    --text: #ddd;
+    --text-medium: #bbb;
+    --text-disabled: #777;
     --text-color-highlight: #ccc;
 
-    --bg-color: #111;
-    --bg-color-lighter: #333;
+    --bg-color: #02181A;
+    --bg-color-lighter: #043133;
+
+    --primary-dark: #ee8640;
+    --accent-dark: #9292FF;
 }

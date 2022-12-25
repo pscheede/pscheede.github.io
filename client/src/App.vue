@@ -1,45 +1,37 @@
 <script setup lang="ts">
-import Router from './components/Router.vue';
+import Header from "@/components/Navigation/Header.vue";
+import MyFooter from "@/components/Navigation/MyFooter.vue";
+import {useRoute} from "vue-router";
+
+const route = useRoute();
 </script>
 
 <template>
-  <Router/>
+  <div class="app">
+    <Header v-if="!route.meta.disableHeader" />
+    <div class="content">
+      <router-view/>
+    </div>
+    <MyFooter v-if="!route.meta.disableFooter" />
+  </div>
 </template>
 
 <style>
-@font-face {
-  font-family: 'Comfortaa';
-  src: url('@/assets/fonts/Comfortaa-Light.ttf');
-  font-weight: 300;
-}
-
-@font-face {
-  font-family: 'Comfortaa';
-  src: url('@/assets/fonts/Comfortaa-Regular.ttf');
-  font-weight: 400;
-}
-
-@font-face {
-  font-family: 'Comfortaa';
-  src: url('@/assets/fonts/Comfortaa-Medium.ttf');
-  font-weight: 500;
-}
-
-@font-face {
-  font-family: 'Comfortaa';
-  src: url('@/assets/fonts/Comfortaa-SemiBold.ttf');
-  font-weight: 600;
-}
-
-@font-face {
-  font-family: 'Comfortaa';
-  src: url('@/assets/fonts/Comfortaa-Bold.ttf');
-  font-weight: 700;
-}
-
 #app {
   font-family: 'Comfortaa', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.app {
+  position: relative;
+  min-height: 100vh;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.footer-host {
+  margin-top: auto;
 }
 </style>
