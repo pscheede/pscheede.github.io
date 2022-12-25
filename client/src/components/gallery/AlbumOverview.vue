@@ -1,10 +1,10 @@
 <script lang="ts" setup>
 import {AlbumInfos, getCategories, getCategoryContent} from "@/components/service/api";
 import {onMounted, ref, Ref, watch} from "vue";
-import NavigationCard from "@/components/Navigation/NavigationCard.vue";
 import {useAlbumTranslations} from "@/components/gallery/AlbumTranslations";
 import {useI18n} from "vue-i18n";
 import {useRoute, useRouter} from "vue-router";
+import AlbumCard from "@/components/gallery/AlbumCard.vue";
 
 const albums: Ref<AlbumInfos[]> = ref([]);
 const highlightAlbum: Ref<AlbumInfos | undefined> = ref(undefined);
@@ -24,7 +24,7 @@ onMounted(async () => {
   categories.value.sort((a, b) => t(a).localeCompare(t(b)));
 
   if (route.query.category) {
-    const newCategory = `categories.${ route.query.category }`;
+    const newCategory = `categories.${route.query.category}`;
 
     if (categories.value.includes(newCategory)) {
       selectedCategory.value = newCategory;
@@ -42,9 +42,9 @@ watch(selectedCategory, async (newCategory) => {
   highlightAlbum.value = categoryContent.highlightAlbum;
 
   if (newCategory !== 'categories.all') {
-    await router.replace({ path: route.fullPath, query: { category: newCategory.replace('categories.', '') } });
+    await router.replace({path: route.fullPath, query: {category: newCategory.replace('categories.', '')}});
   } else {
-    await router.replace({ path: route.fullPath, query: {} });
+    await router.replace({path: route.fullPath, query: {}});
   }
 });
 
@@ -84,11 +84,11 @@ en:
     </div>
 
     <div class="albums">
-      <NavigationCard v-if="highlightAlbum" :image="highlightAlbum.coverImageUrl"
-                      :title="t(highlightAlbum.titleTextKey)"
-                      :to="{ name: 'gallery', params: { albumSlug: highlightAlbum.slug } }"/>
-      <NavigationCard v-for="album in albums" :key="album.slug" :image="album.coverImageUrl"
-                      :title="t(album.titleTextKey)" :to="{ name: 'gallery', params: { albumSlug: album.slug } }"/>
+      <AlbumCard v-if="highlightAlbum" :image="highlightAlbum.coverImageUrl"
+                 :title="t(highlightAlbum.titleTextKey)"
+                 :to="{ name: 'gallery', params: { albumSlug: highlightAlbum.slug } }"/>
+      <AlbumCard v-for="album in albums" :key="album.slug" :image="album.coverImageUrl"
+                 :title="t(album.titleTextKey)" :to="{ name: 'gallery', params: { albumSlug: album.slug } }"/>
     </div>
   </div>
 </template>
@@ -99,10 +99,13 @@ en:
 }
 
 .albums {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 1rem;
+  display: grid;
+  column-gap: 2rem;
+  row-gap: 4rem;
+
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+
+  justify-items: center;
 }
 
 .top-bar {
@@ -113,6 +116,20 @@ en:
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
+
+  flex-direction: column;
+
+  gap: 4rem;
+
+  @media (min-width: 1300px) {
+    flex-direction: row;
+
+    gap: 0;
+  }
+
+  .title-box {
+    align-self: flex-start;
+  }
 
   .dropdown-box {
     display: flex;
